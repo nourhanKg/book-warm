@@ -2,10 +2,12 @@ import Head from "next/head";
 import Image from "next/image";
 import { Inter } from "next/font/google";
 import styles from "@/styles/Home.module.css";
-
+import hero from "../public/images/hero.jpg";
+import NewBooks from "@/components/NewRealeses";
+import Quote from "@/components/Quote";
 const inter = Inter({ subsets: ["latin"] });
 
-export default function Home() {
+export default function Home({ books }) {
   return (
     <>
       <Head>
@@ -14,7 +16,46 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main></main>
+      <main className="my-5">
+        <div className="container">
+          <div className="row">
+            <div className="col-lg-6 order-lg-first order-last">
+              <h1 className="h1">
+                The largest and best online bookstore you can find!
+              </h1>
+              <p className="lead fs-5 md-fs-3">
+                We offer you the chance to browse the world most famous and
+                high-appraised books. You don't have to leave your house and go
+                to the public libraray to browse books anymore!. This isn't just
+                a website where you can only browse book, but you also can keep
+                track of your reading and make your own book-diary.
+              </p>
+              <button className="btn btn-warning text-white bg-gradient">
+                New Realeses
+              </button>
+            </div>
+            <div className="col-lg-6 mb-3">
+              <Image className="img-fluid" src={hero}></Image>
+            </div>
+          </div>
+        </div>
+        <Quote></Quote>
+        <div className="container">
+          <NewBooks books={books}></NewBooks>
+        </div>
+      </main>
     </>
   );
+}
+export async function getServerSideProps() {
+  console.log("calling");
+  const res = await fetch("http://localhost:3000/api/books?new=true");
+  const JSONData = await res.json();
+  const books = JSONData.data.books;
+  console.log(books);
+  return {
+    props: {
+      books: books,
+    },
+  };
 }

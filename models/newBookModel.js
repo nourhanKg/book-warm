@@ -1,5 +1,5 @@
 import { Schema, model, models } from "mongoose";
-const bookSchema = new Schema({
+const newBookSchema = new Schema({
   author: {
     type: String,
     required: true,
@@ -34,11 +34,7 @@ const bookSchema = new Schema({
     type: [Object],
     default: [],
   },
-  new: {
-    type: Boolean,
-    // default: false,
-  },
 });
-const MyBook = models.mybooks || model("mybooks", bookSchema);
+const NewBook = models.newbooks || model("newbooks", newBookSchema);
 
-export default MyBook;
+export default NewBook;

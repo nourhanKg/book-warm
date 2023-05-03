@@ -1,14 +1,13 @@
-import { getSession } from "next-auth/react";
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "../auth/[...nextauth]";
 import connectMongo from "../../../utils/connectMongo";
 import Book from "@/models/bookModel";
 export default async function getAllBooks(req, res) {
   try {
-    const session = await getSession({ req });
-    console.log(session);
+    const session = await getServerSession(req, res, authOptions);
     if (true) {
       await connectMongo();
-      console.log("getting all books");
-      const books = await Book.find({});
+      const books = await Book.find(req.query);
       res.status(212).json({
         status: "success",
         results: books.length,
