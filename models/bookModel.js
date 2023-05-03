@@ -39,6 +39,6 @@ const bookSchema = new Schema({
     // default: false,
   },
 });
-const MyBook = models.mybooks || model("mybooks", bookSchema);
+const MyBook = models.allbooks || model("allbooks", bookSchema);
 
 export default MyBook;

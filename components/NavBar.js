@@ -50,20 +50,22 @@ const NavBar = function () {
                 <Link
                   onClick={changeClass}
                   className="nav-link fs-4"
-                  href="/about"
+                  href="/books"
+                  tabIndex="-1"
+                  aria-disabled="true"
                 >
-                  About
+                  Books
                 </Link>
               </li>
               <li className="nav-item">
                 <Link
                   onClick={changeClass}
                   className="nav-link fs-4"
-                  href="/books"
+                  href="/books/mylist"
                   tabIndex="-1"
                   aria-disabled="true"
                 >
-                  Books
+                  My List
                 </Link>
               </li>
               <li className="nav-item">
@@ -112,15 +114,6 @@ const NavBar = function () {
                 href="/"
               >
                 Home
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link
-                onClick={changeClass}
-                className="nav-link fs-4"
-                href="/about"
-              >
-                About
               </Link>
             </li>
             <li className="nav-item">
