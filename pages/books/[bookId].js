@@ -1,28 +1,47 @@
 import React from "react";
-import { getSession } from "next-auth/react";
-import EditBookForm from "@/components/EditBookForm";
-import { useState } from "react";
+import { getSession, useSession } from "next-auth/react";
+import { useState, useEffect } from "react";
 import { BsBookmarksFill, BsCheckAll } from "react-icons/bs";
-const bookId = function ({ book, myuser }) {
-  console.log(book, myuser);
+const bookId = function ({ book }) {
+  const { data: session, status } = useSession();
+  let user;
+  if (status === "authenticated") {
+    user = session.user;
+  }
   const [isFavorite, setIsFavorite] = useState(false);
+  useEffect(() => {
+    const checkBook = async () => {
+      try {
+        if (user && book) {
+          const response = await fetch(`/api/users/${user._id}/${book._id}`);
+          if (response.ok) {
+            const data = await response.json();
+            setIsFavorite(data.isFavorite);
+          }
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    checkBook();
+  }, [user, book]);
   const addToFavorites = async function () {
-    console.log("added to favorites");
-    const res = await fetch(`/api/users/${session.user.user._id}`, {
+    const res = await fetch(`/api/users/${user._id}`, {
       method: "POST",
       body: JSON.stringify({ ...book }),
       headers: {
         "Content-Type": "application/json",
       },
     });
-    console.log(res);
+    setIsFavorite(true);
     const data = await res.json();
   };
   return (
     <div className="container my-5">
       <div className="row">
         <div className="col-12 col-lg-4 col-md-7">
-          <img className="img-fluid" src={book.imageLink}></img>
+          <img className="img-fluid" height="400px" src={book.imageLink}></img>
         </div>
         <div className="col-12 col-lg-6 col-md-3">
           <div className="card">
@@ -31,7 +50,11 @@ const bookId = function ({ book, myuser }) {
                 <h5 className="card-title h2" style={{ color: "#5B7C99" }}>
                   {book.title}
                 </h5>
-                <button className="btn fs-4" onClick={addToFavorites}>
+                <button
+                  disabled={isFavorite}
+                  className="btn fs-4"
+                  onClick={addToFavorites}
+                >
                   {isFavorite ? (
                     <BsCheckAll></BsCheckAll>
                   ) : (
@@ -68,7 +91,6 @@ const bookId = function ({ book, myuser }) {
           </div>
         </div>
       </div>
-      <EditBookForm book={book}></EditBookForm>
     </div>
   );
 };
@@ -76,16 +98,13 @@ export default bookId;
 export async function getServerSideProps(context) {
   const session = await getSession(context);
   const { params } = context;
-  console.log(session);
   if (session) {
     const res = await fetch(`http://localhost:3000/api/books/${params.bookId}`);
     const JSONData = await res.json();
     const book = JSONData.data.book;
-    const user = session.user;
     return {
       props: {
         book: book,
-        currUser: user,
       },
     };
   } else {

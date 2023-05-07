@@ -1,6 +1,5 @@
 import React from "react";
 import { getSession } from "next-auth/react";
-import BookForm from "@/components/BookForm";
 import Link from "next/link";
 import { useState } from "react";
 const index = function ({ books }) {
@@ -79,7 +78,6 @@ const index = function ({ books }) {
           })}
         </tbody>
       </table>
-      <BookForm></BookForm>
     </div>
   );
 };

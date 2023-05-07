@@ -20,7 +20,6 @@ const Login = function () {
       username,
       password,
     });
-    console.log(res);
     if (res.ok) {
       router.push("/books");
     } else {

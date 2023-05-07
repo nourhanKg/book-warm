@@ -31,7 +31,12 @@ export default function Home({ books }) {
                 track of your reading and make your own book-diary.
               </p>
               <button className="btn btn-warning text-white bg-gradient">
-                New Realeses
+                <a
+                  className="text-dark text-decoration-none"
+                  href="#newrealeses"
+                >
+                  New Realeses
+                </a>
               </button>
             </div>
             <div className="col-lg-6 mb-3">
@@ -40,7 +45,7 @@ export default function Home({ books }) {
           </div>
         </div>
         <Quote></Quote>
-        <div className="container">
+        <div className="container" id="newrealeses">
           <NewBooks books={books}></NewBooks>
         </div>
       </main>
@@ -48,7 +53,6 @@ export default function Home({ books }) {
   );
 }
 export async function getServerSideProps() {
-  console.log("calling");
   const res = await fetch("http://localhost:3000/api/books?new=true");
   const JSONData = await res.json();
   const books = JSONData.data.books;

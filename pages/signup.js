@@ -22,7 +22,6 @@ const Signup = function () {
           "Content-Type": "application/json",
         },
       });
-      console.log(res);
       const data = await res.json();
       router.push("/login");
       return data;
